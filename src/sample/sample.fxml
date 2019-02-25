@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.chart.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+    <right>
+        <AnchorPane prefHeight="400.0" prefWidth="575.0" BorderPane.alignment="CENTER">
+            <children>
+                <LineChart fx:id="chart" animated="false" layoutY="20.0" prefHeight="430.0" prefWidth="576.0">
+                    <xAxis>
+                        <NumberAxis fx:id="axisX" side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis fx:id="axisY" side="LEFT" />
+                    </yAxis>
+                    <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                    </cursor>
+                </LineChart>
+            <TextField fx:id="lagrangeX" layoutX="45.0" layoutY="545.0" prefHeight="27.0" prefWidth="48.0" text="1" />
+            <Label layoutX="20.0" layoutY="513.0" text="y=" />
+            <Label layoutX="20.0" layoutY="479.0" text="y=" />
+            <TextField fx:id="partLineX" layoutX="46.0" layoutY="578.0" prefHeight="27.0" prefWidth="46.0" text="1" />
+            <TextField fx:id="lineK" layoutX="45.0" layoutY="474.0" prefHeight="27.0" prefWidth="99.0" text="k" />
+            <TextField fx:id="lineC" layoutX="183.0" layoutY="474.0" prefHeight="27.0" prefWidth="99.0" text="c" />
+            <TextField fx:id="lagrangeY" layoutX="106.0" layoutY="544.0" prefHeight="27.0" prefWidth="82.0" text="y" />
+            <Label layoutX="154.0" layoutY="479.0" text="*x+" />
+            <TextField fx:id="partLineY" layoutX="105.0" layoutY="578.0" prefHeight="27.0" prefWidth="84.0" text="y" />
+            <TextField fx:id="parabolaA0" layoutX="45.0" layoutY="508.0" prefHeight="27.0" prefWidth="99.0" text="a0" />
+            <Label layoutX="147.0" layoutY="513.0" text="*x^2+" />
+            <TextField fx:id="parabolaA1" layoutX="183.0" layoutY="508.0" prefHeight="27.0" prefWidth="99.0" text="a1" />
+            <Label layoutX="288.0" layoutY="513.0" text="*x+" />
+            <TextField fx:id="parabolaA2" layoutX="310.0" layoutY="508.0" prefHeight="27.0" prefWidth="99.0" text="a2" />
+            </children></AnchorPane>
+    </right>
+    <bottom>
+        <HBox prefHeight="70.0" prefWidth="900.0" BorderPane.alignment="CENTER">
+            <children>
+                <AnchorPane prefHeight="70.0" prefWidth="324.0">
+               <children>
+                  <Button layoutX="97.0" layoutY="16.0" mnemonicParsing="false" onAction="#clear" prefHeight="38.0" prefWidth="153.0" text="Clear" />
+               </children></AnchorPane>
+                <AnchorPane prefHeight="70.0" prefWidth="100.0" />
+                <AnchorPane prefHeight="200.0" prefWidth="406.0">
+               <children>
+                  <Button fx:id="zoom" layoutX="330.0" layoutY="1.0" mnemonicParsing="false" onAction="#zoom" text="zoom" />
+                  <TextField fx:id="minX" layoutX="72.0" layoutY="1.0" prefHeight="27.0" prefWidth="56.0" text="0" />
+                  <TextField fx:id="maxX" layoutX="72.0" layoutY="35.0" prefHeight="27.0" prefWidth="56.0" text="10" />
+                  <TextField fx:id="minY" layoutX="203.0" layoutY="1.0" prefHeight="27.0" prefWidth="56.0" text="0" />
+                  <TextField fx:id="maxY" layoutX="203.0" layoutY="35.0" prefHeight="27.0" prefWidth="56.0" text="10" />
+                  <Label layoutX="22.0" layoutY="6.0" text="min X=" />
+                  <Label layoutX="22.0" layoutY="40.0" text="max X=" />
+                  <Label layoutX="152.0" layoutY="6.0" text="min Y=" />
+                  <Label layoutX="152.0" layoutY="40.0" text="max Y=" />
+                  <Button fx:id="autoZoom" layoutX="330.0" layoutY="35.0" mnemonicParsing="false" onAction="#autoZoom" text="auto zoom" />
+               </children></AnchorPane>
+            </children>
+        </HBox>
+    </bottom>
+    <left>
+        <VBox prefHeight="648.0" prefWidth="313.0" BorderPane.alignment="CENTER">
+            <children>
+                <AnchorPane prefHeight="624.0" prefWidth="313.0">
+                    <children>
+                        <TableView fx:id="valueTable" editable="true" layoutX="14.0" layoutY="14.0" prefHeight="327.0" prefWidth="296.0">
+                            <columns>
+                                <TableColumn id="id" fx:id="columnNumber" prefWidth="46.0" sortable="false" text="id" />
+                                <TableColumn id="x" fx:id="columnX" editable="true" onEditCommit="#refreshTable" onEditStart="#editTable" prefWidth="114.0" sortable="true" text="X" />
+                                <TableColumn id="y" fx:id="columnY" editable="true" prefWidth="135.0" sortable="false" text="Y" />
+                            </columns>
+                        </TableView>
+                        <CheckBox fx:id="lineBox" layoutX="211.0" layoutY="478.0" mnemonicParsing="false" text="Line" />
+                        <CheckBox fx:id="parabolaBox" layoutX="211.0" layoutY="509.0" mnemonicParsing="false" text="Parabola" />
+                  <TextField fx:id="newX" layoutX="31.0" layoutY="402.0" prefHeight="27.0" prefWidth="53.0" />
+                  <TextField fx:id="newY" layoutX="121.0" layoutY="402.0" prefHeight="27.0" prefWidth="55.0" />
+                  <Button fx:id="actionButton" layoutX="211.0" layoutY="402.0" mnemonicParsing="false" onAction="#actionOnPoint" text="Add" />
+                  <Label layoutX="14.0" layoutY="407.0" text="x" />
+                  <Label layoutX="102.0" layoutY="407.0" text="y" />
+                  <Button fx:id="build" layoutX="138.0" layoutY="468.0" mnemonicParsing="false" onAction="#build" text="Build" />
+                  <Button layoutX="138.0" layoutY="505.0" mnemonicParsing="false" onAction="#countYbyX" text="Count" />
+                  <CheckBox fx:id="drawOnGraphics" layoutX="211.0" layoutY="450.0" mnemonicParsing="false" text="draw on graphics" />
+                  <CheckBox fx:id="lagrangeBox" layoutX="211.0" layoutY="540.0" mnemonicParsing="false" selected="true" text="Lagrange" />
+                  <CheckBox fx:id="partLIneBox" layoutX="211.0" layoutY="564.0" mnemonicParsing="false" selected="true" text="Part line" />
+                    </children>
+                </AnchorPane>
+            </children></VBox>
+    </left>
+    <top>
+        <HBox prefHeight="21.0" prefWidth="900.0" BorderPane.alignment="CENTER" />
+    </top>
+</BorderPane>
