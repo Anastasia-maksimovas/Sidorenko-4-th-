@@ -1,4 +1,4 @@
-package sample;
+package com.mycompany.sample;
 
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
@@ -8,7 +8,9 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import org.gillius.jfxutils.chart.JFXChartUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,12 +162,12 @@ public class Controller {
             parabolaA1.setText(Utils.parabolaA1);
             parabolaA2.setText(Utils.parabolaA2);
         }
-        if (lagrangeBox.isSelected()) {
-            buildLagrange();
-        }
-        if (partLIneBox.isSelected()) {
-            buildPartLine();
-        }
+//        if (lagrangeBox.isSelected()) {
+//            buildLagrange();
+//        }
+//        if (partLIneBox.isSelected()) {
+//            buildPartLine();
+//        }
 
     }
 
@@ -229,29 +231,29 @@ public class Controller {
     @FXML
     public void countYbyX() {
         double y;
-//        if (lineBox.isSelected()) {
-//            y = Double.parseDouble(lineK.getText() != null ? lineK.getText() : "1") * Double.parseDouble(lagrangeX.getText()) +
-//                    Double.parseDouble(lineC.getText() != null ? lineC.getText() : "0");
-//            lagrangeY.setText(y + "");
-//        }
-//        if (parabolaBox.isSelected()) {
-//            y = Double.parseDouble(parabolaA0.getText() != null ? parabolaA0.getText() : "1") * Math.pow(Double.parseDouble(parabolaX.getText()), 2) +
-//                    Double.parseDouble(parabolaA1.getText() != null ? parabolaA1.getText() : "1") * Double.parseDouble(lagrangeX.getText()) +
-//                    Double.parseDouble(parabolaA2.getText() != null ? parabolaA2.getText() : "0");
-//            parabolaY.setText(y + "");
-//            if (drawOnGraphics.isSelected()) {
-//                chart.getData().addAll(Utils.customParabola(parabolaA0.getText(), parabolaA1.getText(), parabolaA2.getText(), data));
-//            }
-//
-//        }
-        if(lagrangeBox.isSelected()){
-            y=Utils.interpolatedLagrange(data,Double.parseDouble(lagrangeX.getText() != null ? lagrangeX.getText() : "1"));
+        if (lineBox.isSelected()) {
+            y = Double.parseDouble(lineK.getText() != null ? lineK.getText() : "1") * Double.parseDouble(lagrangeX.getText()) +
+                    Double.parseDouble(lineC.getText() != null ? lineC.getText() : "0");
             lagrangeY.setText(y + "");
         }
-        if(partLIneBox.isSelected()){
-            y=Utils.interpolatedPartLineCount(data,Double.parseDouble(partLineX.getText() != null ? partLineX.getText() : "1"));
-            partLineY.setText(y + "");
+        if (parabolaBox.isSelected()) {
+            y = Double.parseDouble(parabolaA0.getText() != null ? parabolaA0.getText() : "1") * Math.pow(Double.parseDouble(lagrangeX.getText()), 2) +
+                    Double.parseDouble(parabolaA1.getText() != null ? parabolaA1.getText() : "1") * Double.parseDouble(lagrangeX.getText()) +
+                    Double.parseDouble(parabolaA2.getText() != null ? parabolaA2.getText() : "0");
+            lagrangeX.setText(y + "");
+            if (drawOnGraphics.isSelected()) {
+                chart.getData().addAll(Utils.customParabola(parabolaA0.getText(), parabolaA1.getText(), parabolaA2.getText(), data));
+            }
+
         }
+//        if(lagrangeBox.isSelected()){
+//            y=Utils.interpolatedLagrange(data,Double.parseDouble(lagrangeX.getText() != null ? lagrangeX.getText() : "1"));
+//            lagrangeY.setText(y + "");
+//        }
+//        if(partLIneBox.isSelected()){
+//            y=Utils.interpolatedPartLineCount(data,Double.parseDouble(partLineX.getText() != null ? partLineX.getText() : "1"));
+//            partLineY.setText(y + "");
+//        }
     }
 
 
@@ -264,15 +266,22 @@ public class Controller {
 
 
     private void handler() {
-        chart.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                System.out.println(axisY.getUpperBound()-axisX.getLowerBound());
-                System.out.println(event.getY());
+        chart.setOnMouseClicked(event -> {
+            System.out.println(axisY.getUpperBound()-axisX.getLowerBound());
+            System.out.println(event.getY());
 
-                addPoint(new Point(++iter, axisX.getValueForDisplay(event.getX()).doubleValue()-0.4, axisY.getValueForDisplay(event.getY()).doubleValue()+2));
-                fillChart();
-                refreshTable();
+            addPoint(new Point(++iter, axisX.getValueForDisplay(event.getX()).doubleValue()-0.4, axisY.getValueForDisplay(event.getY()).doubleValue()+2));
+            fillChart();
+            refreshTable();
+        });
+
+        //Zooming works only via primary mouse button without ctrl held down
+        JFXChartUtil.setupZooming(chart, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (mouseEvent.getButton() != MouseButton.PRIMARY || mouseEvent.isShortcutDown()) {
+                    mouseEvent.consume();
+                }
             }
         });
 
@@ -285,47 +294,31 @@ public class Controller {
     }
 
     private EventHandler<TableColumn.CellEditEvent<Point, Double>> editStartEventHandler() {
-        return new EventHandler<TableColumn.CellEditEvent<Point, Double>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Point, Double> event) {
-                clicked = event.getRowValue();
-                newX.setText(clicked.getX() + "");
-                newY.setText(clicked.getY() + "");
-                actionButton.setText("edit");
-                actionFlag = 1;
-            }
+        return event -> {
+            clicked = event.getRowValue();
+            newX.setText(clicked.getX() + "");
+            newY.setText(clicked.getY() + "");
+            actionButton.setText("edit");
+            actionFlag = 1;
         };
     }
 
     private EventHandler<TableColumn.CellEditEvent<Point, Double>> editEndEventHandler() {
-        return new EventHandler<TableColumn.CellEditEvent<Point, Double>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Point, Double> event) {
-                defaultParameters();
-            }
-        };
+        return event -> defaultParameters();
     }
 
     private EventHandler<TableColumn.CellEditEvent<Point, Integer>> deleteStartEventHandler() {
-        return new EventHandler<TableColumn.CellEditEvent<Point, Integer>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Point, Integer> event) {
-                clicked = event.getRowValue();
-                newX.setText(clicked.getX() + "");
-                newY.setText(clicked.getY() + "");
-                actionButton.setText("delete");
-                actionFlag = -1;
-            }
+        return event -> {
+            clicked = event.getRowValue();
+            newX.setText(clicked.getX() + "");
+            newY.setText(clicked.getY() + "");
+            actionButton.setText("delete");
+            actionFlag = -1;
         };
     }
 
     private EventHandler<TableColumn.CellEditEvent<Point, Integer>> deleteEndEventHandler() {
-        return new EventHandler<TableColumn.CellEditEvent<Point, Integer>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Point, Integer> event) {
-                defaultParameters();
-            }
-        };
+        return event -> defaultParameters();
     }
 
     private void defaultParameters() {

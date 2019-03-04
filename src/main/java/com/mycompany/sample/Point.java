@@ -1,4 +1,4 @@
-package sample;
+package com.mycompany.sample;
 
 public class Point {
     private int id;

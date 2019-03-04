@@ -1,4 +1,4 @@
-package sample;
+package com.mycompany.sample;
 
 import javafx.scene.chart.XYChart;
 
@@ -7,8 +7,8 @@ import java.util.List;
 public class Utils {
 
     public static final String INPUT_DOTS = "input dots";
-    public static final String APROXIMATED_LINE = "approximated line";
-    public static final String APROXIMATED_PARABOLA = "approximated parabola";
+    public static final String APROXIMATED_LINE = "line";
+    public static final String APROXIMATED_PARABOLA = "parabola";
     public static String lineX = "";
     public static String parabolaX = "";
     public static String lineY = "";
