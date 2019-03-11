@@ -146,7 +146,7 @@ public class Controller {
         for (Point point : data) {
             function.getData().add(new XYChart.Data(point.getX(), point.getY()));
         }
-        chart.getData().addAll(function);
+       chart.getData().addAll(function);
     }
 
     @FXML
@@ -162,12 +162,12 @@ public class Controller {
             parabolaA1.setText(Utils.parabolaA1);
             parabolaA2.setText(Utils.parabolaA2);
         }
-//        if (lagrangeBox.isSelected()) {
-//            buildLagrange();
-//        }
-//        if (partLIneBox.isSelected()) {
-//            buildPartLine();
-//        }
+        if (lagrangeBox.isSelected()) {
+            buildLagrange();
+        }
+        if (partLIneBox.isSelected()) {
+            buildPartLine();
+        }
 
     }
 
@@ -194,10 +194,10 @@ public class Controller {
     }
 
     private void buildPartLine(){
-//        if (chart.getData().size() > 1) {
-//            chart.getData().remove(1, chart.getData().size() - 1);
-//        }
-//        chart.getData().addAll(Utils.interpolatedPartLine(data));
+        if (chart.getData().size() > 1) {
+            chart.getData().remove(1, chart.getData().size() - 1);
+        }
+        chart.getData().addAll(Utils.interpolatedPartLine(data));
     }
     @FXML
     public void zoom() {
@@ -244,26 +244,16 @@ public class Controller {
             if (drawOnGraphics.isSelected()) {
                 chart.getData().addAll(Utils.customParabola(parabolaA0.getText(), parabolaA1.getText(), parabolaA2.getText(), data));
             }
-
         }
-//        if(lagrangeBox.isSelected()){
-//            y=Utils.interpolatedLagrange(data,Double.parseDouble(lagrangeX.getText() != null ? lagrangeX.getText() : "1"));
-//            lagrangeY.setText(y + "");
-//        }
-//        if(partLIneBox.isSelected()){
-//            y=Utils.interpolatedPartLineCount(data,Double.parseDouble(partLineX.getText() != null ? partLineX.getText() : "1"));
-//            partLineY.setText(y + "");
-//        }
+        if(lagrangeBox.isSelected()){
+            y=Utils.interpolatedLagrange(data,Double.parseDouble(lagrangeX.getText() != null ? lagrangeX.getText() : "1"));
+            lagrangeY.setText(y + "");
+        }
+        if(partLIneBox.isSelected()){
+            y=Utils.interpolatedPartLineCount(data,Double.parseDouble(partLineX.getText() != null ? partLineX.getText() : "1"));
+            partLineY.setText(y + "");
+        }
     }
-
-
-
-
-
-
-
-
-
 
     private void handler() {
         chart.setOnMouseClicked(event -> {

@@ -168,6 +168,7 @@ public class Utils {
         for (double x = min+step; x <= max; x += step) {
             function.getData().add(new XYChart.Data(x,interpolatedPartLineCount(data, x)));
         }
+        function.setName("part line");
         return function;
     }
 
